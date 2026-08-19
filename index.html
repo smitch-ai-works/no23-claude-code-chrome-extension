@@ -236,12 +236,21 @@ html,body{max-width:100%;overflow-x:hidden}
 .fk-checklist{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
 .fk-checklist span{font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;
  background:var(--sk-surface);color:var(--sk-ink);border:1px solid var(--sk-line)}
+/* 折りたたみ式プロンプトボックス（2026-08-19〜）。長いプロンプトが常時全文
+   表示されるとページが間延びして最後まで読まれなくなる、との指摘で開閉式に変更。
+   コピーボタンはsummary内＝常に見える位置に置き、閉じたままコピーできるようにする。 */
 .fk-prompt{background:var(--sk-dark1);color:#E7E9EC;border-radius:12px;margin-top:12px;overflow:hidden}
 .fk-prompt-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 13px;
- border-bottom:1px solid rgba(255,255,255,.13);font-size:11px;letter-spacing:.06em}
-.fk-prompt-h span{color:var(--sk-hl);font-weight:900}
+ border-bottom:1px solid rgba(255,255,255,.13);font-size:11px;letter-spacing:.06em;cursor:pointer;
+ list-style:none}
+.fk-prompt-h::-webkit-details-marker{display:none}
+.fk-prompt-h>span:first-child{color:var(--sk-hl);font-weight:900;overflow:hidden;text-overflow:ellipsis;
+ white-space:nowrap}
+.fk-prompt-h-right{display:flex;align-items:center;gap:9px;flex:none}
 .fk-prompt-copy{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:999px;
  padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer}
+.fk-prompt-arrow{color:rgba(255,255,255,.55);font-size:11px;transition:transform .2s ease}
+.fk-prompt[open] .fk-prompt-arrow{transform:rotate(180deg)}
 .fk-prompt pre{margin:0;padding:14px;font-size:12px;line-height:1.95;white-space:pre-wrap;
  font-family:var(--sk-font);color:#DFE2E6}
 .fk-prompt pre i{font-style:normal;color:var(--sk-hl)}
@@ -328,7 +337,10 @@ html,body{max-width:100%;overflow-x:hidden}
 
 <header class="fk-hero">
  <div class="fk-hero-bg"><img src="assets/hero.jpg" alt="木製デスクに置かれたノートPCの画面に、Chromeブラウザの拡張機能管理画面が表示されている様子"></div>
+ 
  <h1>そのアイデア、<br><em>Claude Codeが5分で形にします。</em></h1>
+ 
+ 
 </header>
 
 <section class="sk-sec">
@@ -381,14 +393,14 @@ html,body{max-width:100%;overflow-x:hidden}
    <div class="fk-step0-body">
     <p class="fk-step-text">Claude Codeは、Anthropic公式が配っているインストールコマンドで入れられます。お使いのOSに合わせて、どちらか1行をターミナルに貼り付けてください。インストール後、初めて「claude」と打って起動したときにブラウザが開き、ログインを求められます。案内に沿って進めばOKです。</p>
     <div class="fk-checklist"><span>Mac・Windowsどちらも対応</span><span>無料でインストールできる</span><span>初回起動時はブラウザでログイン</span><span>使うにはPro以上のプラン登録が必要</span></div>
-    <div class="fk-prompt">
-     <div class="fk-prompt-h"><span>Macの場合（ターミナル）</span><button class="fk-prompt-copy" type="button">コピー</button></div>
-     <pre>curl -fsSL https://claude.ai/install.sh | bash</pre>
-    </div>
-    <div class="fk-prompt">
-     <div class="fk-prompt-h"><span>Windowsの場合（PowerShell）</span><button class="fk-prompt-copy" type="button">コピー</button></div>
-     <pre>irm https://claude.ai/install.ps1 | iex</pre>
-    </div>
+    <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>Macの場合（ターミナル）</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
+      <pre>curl -fsSL https://claude.ai/install.sh | bash</pre>
+     </details>
+    <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>Windowsの場合（PowerShell）</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
+      <pre>irm https://claude.ai/install.ps1 | iex</pre>
+     </details>
    </div>
   </details>
  </div>
@@ -404,8 +416,8 @@ html,body{max-width:100%;overflow-x:hidden}
      <p class="fk-step-text">Claude Codeを起動したらプランモードに切り替え、どんな拡張機能を作りたいかを日本語で伝えます。設計だけ先に固めるので、いきなり変な実装が始まる心配がありません。</p>
      
      <div class="fk-step-img"><img src="assets/step1-planmode.jpg" alt="Claude Codeの画面下部に「plan mode on」と表示されている様子" loading="lazy"></div><p class="fk-step-img-cap">画面下の「plan mode on」がプランモードのサイン</p>
-     <div class="fk-prompt">
-      <div class="fk-prompt-h"><span>伝える内容の例</span><button class="fk-prompt-copy" type="button">コピー</button></div>
+     <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>伝える内容の例</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
       <pre>Chrome拡張機能を作りたいです。
 
 【拡張機能でやりたいこと】
@@ -421,7 +433,7 @@ Instagramのプロフィールページを開いたときに、
 ・直近の投稿からいいね数の平均も表示する
 
 まず設計を教えてください。実装はそのあとで大丈夫です。</pre>
-     </div>
+     </details>
      
     </div>
    </div>
@@ -552,7 +564,9 @@ Instagramのプロフィールページを開いたときに、
 
 <script>
 document.querySelectorAll('.fk-prompt-copy').forEach(function(btn){
-  btn.addEventListener('click', function(){
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     var pre = btn.closest('.fk-prompt').querySelector('pre');
     navigator.clipboard.writeText(pre.textContent).then(function(){
       var t = btn.textContent; btn.textContent = '✓ コピー済み';
